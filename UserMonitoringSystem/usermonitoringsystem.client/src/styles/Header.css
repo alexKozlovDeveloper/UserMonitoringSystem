@@ -1,0 +1,10 @@
+.header-link {
+    padding: 15px;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 2rem;
+    background-color: whitesmoke;
+}
