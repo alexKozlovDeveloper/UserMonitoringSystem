@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using UserMonitoringSystem.Server;
 
@@ -11,7 +12,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(
     options => options.UseSqlServer(connectionString)
     );
 
-//builder.Services.AddAuthorization();
+builder.Services.AddAuthorization();
+
+builder.Services.AddIdentityApiEndpoints<IdentityUser>()
+    .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -19,6 +23,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+app.MapIdentityApi<IdentityUser>();
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
