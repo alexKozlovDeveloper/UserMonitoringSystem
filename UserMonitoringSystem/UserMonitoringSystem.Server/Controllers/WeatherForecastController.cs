@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using UserMonitoringSystem.Server.Models;
 
 namespace UserMonitoringSystem.Server.Controllers
 {

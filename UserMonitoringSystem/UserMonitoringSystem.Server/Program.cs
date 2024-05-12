@@ -14,6 +14,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(
 
 builder.Services.AddAuthorization();
 
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+
 builder.Services.AddIdentityApiEndpoints<IdentityUser>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 

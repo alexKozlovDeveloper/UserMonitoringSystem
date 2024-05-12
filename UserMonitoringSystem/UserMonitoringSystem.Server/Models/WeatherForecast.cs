@@ -1,4 +1,4 @@
-namespace UserMonitoringSystem.Server
+namespace UserMonitoringSystem.Server.Models
 {
     public class WeatherForecast
     {
