@@ -1,10 +1,10 @@
 import React from 'react';
 import Header from '../common/Header';
 
-const HomePage = () =>
+const UsersPage = () =>
     <div>
         <Header />
-        <div>HomePage</div>
+        <div>Users</div>
     </div>;
 
-export default HomePage;
+export default UsersPage;

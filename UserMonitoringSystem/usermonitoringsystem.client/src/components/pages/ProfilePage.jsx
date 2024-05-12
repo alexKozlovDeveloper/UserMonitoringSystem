@@ -4,7 +4,7 @@ import Header from '../common/Header';
 const ProfilePage = () =>
     <div>
         <Header />
-        <div>ProfilePage</div>
+        <div>Profile</div>
     </div>;
 
 export default ProfilePage;

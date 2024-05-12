@@ -1,0 +1,16 @@
+.login-form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+}
+
+.login-form input {
+    margin: 1rem;
+}

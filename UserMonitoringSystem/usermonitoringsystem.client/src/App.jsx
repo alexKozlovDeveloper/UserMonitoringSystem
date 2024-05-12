@@ -2,10 +2,9 @@ import './App.css';
 
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 
-import HomePage from './components/pages/HomePage';
 import ProfilePage from './components/pages/ProfilePage';
-import WeatherForecast from './components/pages/WeatherForecast';
-import UsersMonitoringPage from './components/pages/UsersMonitoringPage';
+import WeatherForecastPage from './components/pages/WeatherForecastPage';
+import UsersPage from './components/pages/UsersPage';
 import LoginPage from './components/pages/LoginPage';
 import SignupPage from './components/pages/SignupPage';
 import NotFoundPage from './components/pages/NotFoundPage';
@@ -15,10 +14,9 @@ function App() {
         <div>
             <BrowserRouter>
                 <Routes>
-                    <Route path="/" element={<HomePage />} />
-                    <Route path="/profile" element={<ProfilePage />} />
-                    <Route path="/weatherforecast" element={<WeatherForecast />} />
-                    <Route path="/usersmonitoring" element={<UsersMonitoringPage />} />
+                    <Route path="/" element={<WeatherForecastPage />} />
+                    <Route path="/profile" element={<ProfilePage />} />                   
+                    <Route path="/users" element={<UsersPage />} />
                     <Route path="/signup" element={<SignupPage />} />
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="*" element={<NotFoundPage />} />

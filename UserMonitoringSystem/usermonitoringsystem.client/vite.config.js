@@ -49,6 +49,18 @@ export default defineConfig({
             '^/weatherforecast': {
                 target: 'https://localhost:7040/',
                 secure: false
+            },
+            '^/register': {
+                target: 'https://localhost:7040/',
+                secure: false
+            },
+            '^/login': {
+                target: 'https://localhost:7040/',
+                secure: false
+            },
+            '^/logout': {
+                target: 'https://localhost:7040/',
+                secure: false
             }
         },
         port: 5173,
