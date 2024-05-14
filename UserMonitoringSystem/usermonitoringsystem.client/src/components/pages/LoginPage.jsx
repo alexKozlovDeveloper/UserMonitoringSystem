@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 
 import { useNavigate, Link } from 'react-router-dom';
 
+import { useUser } from '../UserContext';
+
 import '../../styles/LoginPage.css'
 
 const LoginPage = () => {
@@ -9,6 +11,8 @@ const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+
+  const { fetchCurrentUser } = useUser();
 
   const navigate = useNavigate();
 
@@ -34,6 +38,7 @@ const LoginPage = () => {
         }),
       });
       if (response.ok) {
+        fetchCurrentUser();
         navigate("/")
       } else {
         setErrorMessage('Invalid email or password');

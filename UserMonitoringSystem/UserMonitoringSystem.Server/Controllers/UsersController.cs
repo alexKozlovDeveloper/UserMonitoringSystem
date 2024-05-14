@@ -156,5 +156,32 @@ namespace UserMonitoringSystem.Server.Controllers
 
             return Ok(dto);
         }
+
+        [HttpPost("{userId}:changeRoles")]
+        [Authorize(Roles = "admin")]
+        public async Task<ActionResult<UserDto>> ChangeUserRoles(
+            string userId, 
+            [FromBody] List<string> roles
+            )
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                return NotFound($"User with Id {userId} not found.");
+            }
+
+            var userRoles = await _userManager.GetRolesAsync(user);
+            await _userManager.RemoveFromRolesAsync(user, userRoles);
+
+            var result = await _userManager.AddToRolesAsync(user, roles);
+
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.Errors);
+            }
+
+            return Ok(_mapper.Map<UserDto>(user));
+        }
     }
 }

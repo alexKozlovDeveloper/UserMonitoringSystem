@@ -9,26 +9,55 @@ export const UserProvider = ({ children }) => {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchCurrentUser = async () => {
-      try {
-        const response = await fetch('/users/@me');
-        if (!response.ok) {
-          throw new Error('Failed to fetch current user');
-        }
-        const data = await response.json();
-        setUser(data);
-      } catch (error) {
-        console.error('Error fetching current user:', error);
-        navigate('/login');
+  const fetchCurrentUser = async () => {
+    try {
+      const response = await fetch('/users/@me');
+      if (!response.ok) {
+        throw new Error('Failed to fetch current user');
       }
-    };
+      const data = await response.json();
+      setUser(data);
+    } catch (error) {
+      console.error('Error fetching current user:', error);
+      navigate('/login');
+    }
+  };
 
+  useEffect(() => {
     fetchCurrentUser();
   }, [history]);
 
+  const logout = async () => {
+    try {
+      const response = await fetch('/logout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'accept': '*/*'
+        },
+        body: '{}',
+      });
+      if (!response.ok) {
+        throw new Error('Logout failed');
+      }
+      setUser(null);
+      navigate('/login');
+    } catch (error) {
+      console.error('Error during logout:', error);
+    }
+  };
+
+  // await fetch('logout', {
+  //   method: 'POST',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //     'accept': '*/*'
+  //   },
+  //   body: '{}',
+  // });
+
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ user, setUser, logout, fetchCurrentUser}}>
       {children}
     </UserContext.Provider>
   );

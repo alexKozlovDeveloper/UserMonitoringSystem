@@ -8,19 +8,24 @@ import '../../styles/Header.css'
 
 const Header = () => {
 
-  const { user } = useUser();
+  const { user, logout } = useUser();
 
   console.log(user);
 
   async function handleLogout() {
-    await fetch('logout', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'accept': '*/*'
-      },
-      body: '{}',
-    });
+console.log('try logout');
+    await logout();
+    console.log('already logout');
+
+
+    // await fetch('logout', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     'accept': '*/*'
+    //   },
+    //   body: '{}',
+    // });
   }
 
   return (
@@ -31,9 +36,12 @@ const Header = () => {
         <Link className='header-link' to="/users">Users</Link>
       </div>
       <div className='user-info-container'>
-        <div>
-          {/* Hello <strong>{user.userName}</strong> */}
-        </div>
+        { user ?
+          <div>
+            Hello <strong>{user.userName}</strong>
+          </div>
+          :
+          null}
         <div>
           <Link className='header-link' to="/login" onClick={handleLogout}>Logout</Link>
         </div>

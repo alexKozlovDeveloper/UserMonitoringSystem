@@ -68,7 +68,7 @@ const ProfilePage = () => {
                                 <td>
                                     <UserAvatar userId={userId} />
                                     <div>
-                                        <input type="file" accept="image/*" onChange={handleFileChange} />
+                                        <input type="file" accept="image/svg+xml,image/png,image/jpeg" onChange={handleFileChange} />
                                         <button onClick={handleUploadImage}>Upload</button>
                                     </div>
                                 </td>
