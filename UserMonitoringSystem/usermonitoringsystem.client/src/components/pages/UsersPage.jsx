@@ -52,8 +52,8 @@ const UsersPage = () => {
               <td>{item.lastLoginAt}</td>
               <td><UserAvatar userId={item.id} /></td>
               <td><Link className='header-link' to={`/profile?userId=${item.id}`}>Profile</Link></td>
-              {user.roles.includes('admin') ? <td><button onClick={() => makeAdmin(item.id)}>Make admin</button></td> : null}
-              {user.roles.includes('admin') ? <td><button onClick={() => deleteUser(item.id)}>Delete</button></td> : null}
+              {GetMakeAdminButton(item)}
+              {GetDeleteButton(item)}
             </tr>
           )}
         </tbody>
@@ -67,6 +67,36 @@ const UsersPage = () => {
       {contents}
     </div>
   )
+
+  function GetMakeAdminButton(item) {
+
+    if (user.roles.includes('admin') === false) {
+      return null;
+    }
+
+    let isDisabled = item.roles.includes('admin')
+
+    return (
+      <td>
+        <button disabled={isDisabled} onClick={() => makeAdmin(item.id)}>Make admin</button>
+      </td>
+    )
+  }
+
+  function GetDeleteButton(item) {
+
+    if (user.roles.includes('admin') === false) {
+      return null;
+    }
+
+    let isDisabled = user.id === item.id
+
+    return (
+      <td>
+        <td><button disabled={isDisabled} onClick={() => deleteUser(item.id)}>Delete</button></td>
+      </td>
+    )
+  }
 
   async function getUserData() {
     try {

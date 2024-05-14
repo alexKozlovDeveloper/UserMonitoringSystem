@@ -74,6 +74,15 @@ const LoginPage = () => {
       <div>
         Don't have an account? <Link className='header-link' to="/signup">Sign up</Link>
       </div>
+      <div className='testing-note'>
+        <div>
+          For testing:
+          <br />
+          <strong>email:</strong> admin@admin.com
+          <br />
+          <strong>password:</strong> $Admin1
+        </div>
+      </div>
     </div>
   );
 };

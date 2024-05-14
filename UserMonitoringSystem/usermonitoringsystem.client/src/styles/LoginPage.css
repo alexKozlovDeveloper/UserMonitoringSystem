@@ -2,7 +2,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 50vh;
+    height: 40vh;
 }
 
 .login-form {
@@ -13,4 +13,15 @@
 
 .login-form input {
     margin: 1rem;
+}
+
+.testing-note div {
+    display: inline-block;
+}
+
+.testing-note div {
+    margin: 25px;
+    padding: 10px;
+    background-color: darkorange;
+    color: black;
 }

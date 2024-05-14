@@ -21,9 +21,9 @@ const ProfilePage = () => {
 
     const { user } = useUser();
 
-    if(userId === null) {        
+    if (userId === null) {
         userId = user.id
-    }    
+    }
 
     useEffect(() => {
         fetchUserData();
@@ -31,27 +31,27 @@ const ProfilePage = () => {
 
     const handleFileChange = (event) => {
         setSelectedFile(event.target.files[0]);
-      };
+    };
 
-      const handleUploadImage = async () => {
+    const handleUploadImage = async () => {
         try {
-          if (!selectedFile) {
-            console.error('No file selected');
-            return;
-          }
-      
-          const formData = new FormData();
-          formData.append('file', selectedFile);
-          await axios.post(`/users/${userId}:uploadImage`, formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data'
+            if (!selectedFile) {
+                console.error('No file selected');
+                return;
             }
-          });
-          console.log('Image uploaded successfully');
+
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+            await axios.post(`/users/${userId}:uploadImage`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            console.log('Image uploaded successfully');
         } catch (error) {
-          console.error('Error uploading image:', error);
+            console.error('Error uploading image:', error);
         }
-      };
+    };
 
     return (
         <div>
@@ -68,8 +68,8 @@ const ProfilePage = () => {
                                 <td>
                                     <UserAvatar userId={userId} />
                                     <div>
-                                        <input type="file" accept="image/svg+xml,image/png,image/jpeg" onChange={handleFileChange} />
-                                        <button onClick={handleUploadImage}>Upload</button>
+                                        {userId === user.id ? <input type="file" accept="image/svg+xml,image/png,image/jpeg" onChange={handleFileChange} /> : null}
+                                        {userId === user.id ? <button onClick={handleUploadImage}>Upload</button> : null}
                                     </div>
                                 </td>
                             </tr>
