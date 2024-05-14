@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using UserMonitoringSystem.Server.Data;
 using UserMonitoringSystem.Server.Data.Entities;
 using UserMonitoringSystem.Server.Models;
@@ -138,6 +139,22 @@ namespace UserMonitoringSystem.Server.Controllers
             }
 
             return File(user.ImageData, "application/octet-stream", "image.png");                       
+        }
+
+        [HttpGet("@me")]
+        public async Task<IActionResult> GetCurrentUser()
+        {
+            var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var user = await _userManager.FindByIdAsync(userId);
+
+            var roles = await _userManager.GetRolesAsync(user);
+
+            var dto = _mapper.Map<UserDto>(user);
+
+            dto.Roles = [.. roles];
+
+            return Ok(dto);
         }
     }
 }
