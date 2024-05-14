@@ -66,7 +66,7 @@ namespace UserMonitoringSystem.Server.Controllers
             return _mapper.Map<UserDto>(user);
         }
 
-        [HttpPost("/{userId}/uploadImage")]
+        [HttpPost("{userId}/uploadImage")]
         [Consumes("multipart/form-data")]
         public async Task<UserDto> UploadFileAsync(string userId, IFormFile file, CancellationToken cancellationToken)
         {
@@ -104,10 +104,15 @@ namespace UserMonitoringSystem.Server.Controllers
             return _mapper.Map<UserDto>(user);
         }
 
-        [HttpGet("/{userId}:image")]
+        [HttpGet("{userId}:image")]
         public async Task<IActionResult> GetImage(string userId, CancellationToken cancellationToken)
         {
             var user = await _dbContext.Users.FirstOrDefaultAsync(a => a.Id == userId, cancellationToken);
+
+            if(user?.ImageData == null)
+            {
+                return NotFound();
+            }
 
             return File(user.ImageData, "application/octet-stream", "image.png");                       
         }

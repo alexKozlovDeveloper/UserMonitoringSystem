@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 
 import Header from '../common/Header';
 
+import UserAvatar from '../common/UserAvatar';
+
 import '../../styles/UsersPage.css'
 
 const UsersPage = () => {
@@ -36,7 +38,7 @@ const UsersPage = () => {
                 <td>{user.userName}</td>
                 <td>{user.loginCount}</td>
                 <td>{user.lastLoginAt}</td>
-                <td>image</td>
+                <td><UserAvatar userId={user.id}/></td>
                 <td>profile</td>
                 <td>delete</td>
               </tr>
