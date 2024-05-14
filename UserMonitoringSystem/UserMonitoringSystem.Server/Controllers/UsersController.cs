@@ -25,6 +25,8 @@ namespace UserMonitoringSystem.Server.Controllers
         private readonly UserManager<User> _userManager = userManager;
         private readonly RoleManager<IdentityRole> _roleManager = roleManager;
 
+        private const int MaxImageSizeByte = 1_000_000;
+
         [HttpGet]
         public async Task<IEnumerable<UserDto>> GetUsers()
         {
@@ -61,27 +63,27 @@ namespace UserMonitoringSystem.Server.Controllers
         }
 
         [HttpGet("{userId}")]
-        public async Task<UserDto> GetUser(string userId, CancellationToken cancellationToken)
+        public async Task<ActionResult<UserDto>> GetUser(string userId, CancellationToken cancellationToken)
         {
-            var user = await _dbContext.Users.FirstOrDefaultAsync(a => a.Id == userId, cancellationToken);
+            var dto = await GetUserAsDto(userId);
 
-            if(user == null)
+            if (dto == null)
             {
-                // TODO: handle 404
+                return NotFound($"User with Id {userId} not found.");
             }
 
-            return _mapper.Map<UserDto>(user);
+            return dto;
         }
 
         [Authorize(Roles = "admin")]
         [HttpDelete("{userId}")]
-        public async Task<UserDto> DeleteUser(string userId, CancellationToken cancellationToken)
+        public async Task<ActionResult<UserDto>> DeleteUser(string userId, CancellationToken cancellationToken)
         {
             var user = await _dbContext.Users.FirstOrDefaultAsync(a => a.Id == userId, cancellationToken);
 
             if (user == null)
             {
-                // TODO: handle 404
+                return NotFound($"User with Id {userId} not found.");
             }
 
             var entry = _dbContext.Users.Remove(user);
@@ -92,9 +94,14 @@ namespace UserMonitoringSystem.Server.Controllers
 
         [HttpPost("{userId}:uploadImage")]
         [Consumes("multipart/form-data")]
-        public async Task<UserDto> UploadFileAsync(string userId, IFormFile file, CancellationToken cancellationToken)
+        public async Task<ActionResult<UserDto>> UploadFileAsync(string userId, IFormFile file, CancellationToken cancellationToken)
         {
             var user = await _dbContext.Users.FirstOrDefaultAsync(a => a.Id == userId, cancellationToken);
+
+            if (user == null)
+            {
+                return NotFound($"User with Id {userId} not found.");
+            }
 
             using (var sourceFileStream = file.OpenReadStream())
             {
@@ -110,11 +117,9 @@ namespace UserMonitoringSystem.Server.Controllers
                         await destinationFileStream.WriteAsync(buffer, 0, read);
                         totalReadBytes += read;
 
-                        Console.WriteLine("loading...");
-
-                        if(totalReadBytes > 10_000_000)
+                        if (totalReadBytes > MaxImageSizeByte)
                         {
-                            // TODO: handle size 
+                            return BadRequest("The size of the image exceeds the limit.");
                         }
                     }
 
@@ -129,38 +134,42 @@ namespace UserMonitoringSystem.Server.Controllers
         }
 
         [HttpGet("{userId}:image")]
-        public async Task<IActionResult> GetImage(string userId, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetImage(string userId)
         {
-            var user = await _dbContext.Users.FirstOrDefaultAsync(a => a.Id == userId, cancellationToken);
+            var user = await _dbContext.Users.FirstOrDefaultAsync(a => a.Id == userId);
 
-            if(user?.ImageData == null)
+            if (user == null)
             {
-                return NotFound();
+                return NotFound($"User with Id {userId} not found.");
             }
 
-            return File(user.ImageData, "application/octet-stream", "image.png");                       
+            if (user?.ImageData == null)
+            {
+                return NotFound($"User with Id {userId} has no image.");
+            }
+
+            return File(user.ImageData, "application/octet-stream", "image.png");
         }
 
         [HttpGet("@me")]
-        public async Task<IActionResult> GetCurrentUser()
+        public async Task<ActionResult<UserDto>> GetCurrentUser()
         {
             var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var user = await _userManager.FindByIdAsync(userId);
+            var dto = await GetUserAsDto(userId);
 
-            var roles = await _userManager.GetRolesAsync(user);
+            if (dto == null)
+            {
+                return NotFound($"User with Id {userId} not found.");
+            }
 
-            var dto = _mapper.Map<UserDto>(user);
-
-            dto.Roles = [.. roles];
-
-            return Ok(dto);
+            return dto;
         }
 
         [HttpPost("{userId}:changeRoles")]
         [Authorize(Roles = "admin")]
         public async Task<ActionResult<UserDto>> ChangeUserRoles(
-            string userId, 
+            string userId,
             [FromBody] List<string> roles
             )
         {
@@ -181,7 +190,23 @@ namespace UserMonitoringSystem.Server.Controllers
                 return BadRequest(result.Errors);
             }
 
-            return Ok(_mapper.Map<UserDto>(user));
+            return _mapper.Map<UserDto>(user);
+        }
+
+        // TODO: need something like user service for this kind of action
+        private async Task<UserDto?> GetUserAsDto(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null) { return null; }
+
+            var roles = await _userManager.GetRolesAsync(user);
+
+            var dto = _mapper.Map<UserDto>(user);
+
+            dto.Roles = [.. roles];
+
+            return dto;
         }
     }
 }

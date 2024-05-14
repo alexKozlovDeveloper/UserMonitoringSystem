@@ -1,28 +1,23 @@
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 using UserMonitoringSystem.Server.Models;
 
 namespace UserMonitoringSystem.Server.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    public class WeatherForecastController(
+        ILogger<WeatherForecastController> logger
+        ) : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
+        private readonly ILogger<WeatherForecastController> _logger = logger;
+
+        private static readonly string[] Summaries =
+        [
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
-
-        private readonly ILogger<WeatherForecastController> _logger;
-
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
-        {
-            _logger = logger;
-        }
-
-        [Authorize]
+        ];
+        
         [HttpGet]
         public IEnumerable<WeatherForecastDto> GetWeatherForecast()
         {
@@ -35,7 +30,6 @@ namespace UserMonitoringSystem.Server.Controllers
             .ToArray();
         }
 
-        [Authorize]
         [HttpGet("{year}")]
         public Dictionary<string, WeatherForecastDto[]> GetTemperatureByYear(int year)
         {
@@ -61,7 +55,8 @@ namespace UserMonitoringSystem.Server.Controllers
                 month => month, 
                 month => 
                 { 
-                    return Enumerable.Range(1, rnd.Next(1, 4)).Select(index => new WeatherForecastDto
+                    return Enumerable.Range(1, rnd.Next(1, 4))
+                    .Select(index => new WeatherForecastDto
                     {
                         Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
                         TemperatureC = rnd.Next(-20, 55),
