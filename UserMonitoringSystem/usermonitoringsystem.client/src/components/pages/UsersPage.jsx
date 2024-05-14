@@ -24,7 +24,8 @@ const UsersPage = () => {
         <table className="table table-striped" aria-labelledby="tabelLabel">
           <thead>
             <tr>
-              <th>User Name</th>
+              <th>Id</th>
+              <th>Name</th>
               <th>Roles</th>
               <th>Login Count</th>
               <th>Last Login At</th>
@@ -36,6 +37,7 @@ const UsersPage = () => {
           <tbody>
             {usersData.map(user =>
               <tr key={user.id}>
+                <td>{user.id}</td>
                 <td>{user.userName}</td>
                 <td>{user.roles}</td>
                 <td>{user.loginCount}</td>

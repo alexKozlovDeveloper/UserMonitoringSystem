@@ -89,7 +89,7 @@ namespace UserMonitoringSystem.Server.Controllers
             return _mapper.Map<UserDto>(user);
         }
 
-        [HttpPost("{userId}/uploadImage")]
+        [HttpPost("{userId}:uploadImage")]
         [Consumes("multipart/form-data")]
         public async Task<UserDto> UploadFileAsync(string userId, IFormFile file, CancellationToken cancellationToken)
         {
