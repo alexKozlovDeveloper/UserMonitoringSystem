@@ -1,0 +1,9 @@
+.year-input-container {
+    padding: 10px;
+    display: inline-flex;
+}
+
+.year-input-container div {
+    padding: 10px;
+    align-content: center;
+}

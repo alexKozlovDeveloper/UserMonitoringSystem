@@ -27,13 +27,14 @@ console.log('try logout');
     //   body: '{}',
     // });
   }
-
+  
   return (
     <div className='header-container'>
       <div>
         <Link className='header-link' to="/">Weather Forecast</Link>
         <Link className='header-link' to="/profile">My Profile</Link>
         <Link className='header-link' to="/users">Users</Link>
+        <Link className='header-link' to="/temperature">Temperature</Link>
       </div>
       <div className='user-info-container'>
         { user ?
