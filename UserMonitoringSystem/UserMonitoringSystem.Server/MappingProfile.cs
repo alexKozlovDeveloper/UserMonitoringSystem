@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Identity;
+using UserMonitoringSystem.Server.Data.Entities;
 using UserMonitoringSystem.Server.Models;
 
 namespace UserMonitoringSystem.Server
@@ -8,7 +8,7 @@ namespace UserMonitoringSystem.Server
     {
         public MappingProfile()
         {
-            CreateMap<IdentityUser, UserDto>();
+            CreateMap<User, UserDto>();
         }
     }
 }

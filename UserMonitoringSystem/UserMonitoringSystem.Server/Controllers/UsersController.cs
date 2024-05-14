@@ -10,6 +10,7 @@ using UserMonitoringSystem.Server.Models;
 namespace UserMonitoringSystem.Server.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("users")]
     public class UsersController(
         ApplicationDbContext dbContext,
@@ -23,16 +24,18 @@ namespace UserMonitoringSystem.Server.Controllers
         private readonly UserManager<User> _userManager = userManager;
         private readonly RoleManager<IdentityRole> _roleManager = roleManager;
 
-        [Authorize]
         [HttpGet]
         public async Task<IEnumerable<UserDto>> GetUsers()
         {
             var users = await _dbContext.Users.ToListAsync();
 
+            var user = await userManager.FindByIdAsync(users.First().Id);
+
+            //var d = await userManager.GetLoginsAsync(user);
+
             return _mapper.Map<IEnumerable<UserDto>>(users);
         }
 
-        [Authorize]
         [HttpGet("{userId}")]
         public async Task<UserDto> GetUser(string userId, CancellationToken cancellationToken)
         {
@@ -46,8 +49,7 @@ namespace UserMonitoringSystem.Server.Controllers
             return _mapper.Map<UserDto>(user);
         }
 
-        //[Authorize(Roles = "admin")]
-        [Authorize]
+        [Authorize(Roles = "admin")]
         [HttpDelete("{userId}")]
         public async Task<UserDto> DeleteUser(string userId, CancellationToken cancellationToken)
         {

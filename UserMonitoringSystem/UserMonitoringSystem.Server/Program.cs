@@ -36,13 +36,15 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
+app.UseMiddleware<LoginMiddleware>();
+
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
 
     var userManager = services.GetRequiredService<UserManager<User>>();
     var rolesManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-    await RoleInitializer.InitializeAsync(userManager, rolesManager);
+    await RoleInitializer.InitializeAsync(userManager, rolesManager);    
 }
 
 app.MapIdentityApi<User>();
