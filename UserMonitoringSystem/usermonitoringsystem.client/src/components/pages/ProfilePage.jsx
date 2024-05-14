@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
 import { useUser } from '../UserContext';
-
 import Header from '../common/Header';
 import UserAvatar from '../common/UserAvatar';
 
@@ -36,7 +34,6 @@ const ProfilePage = () => {
     const handleUploadImage = async () => {
         try {
             if (!selectedFile) {
-                console.error('No file selected');
                 return;
             }
 
@@ -47,7 +44,6 @@ const ProfilePage = () => {
                     'Content-Type': 'multipart/form-data'
                 }
             });
-            console.log('Image uploaded successfully');
         } catch (error) {
             console.error('Error uploading image:', error);
         }
@@ -66,7 +62,7 @@ const ProfilePage = () => {
                                     <strong>Avatar</strong>
                                 </td>
                                 <td>
-                                    <UserAvatar userId={userId} />
+                                    <UserAvatar userId={userData.id} />
                                     <div>
                                         {userId === user.id ? <input type="file" accept="image/svg+xml,image/png,image/jpeg" onChange={handleFileChange} /> : null}
                                         {userId === user.id ? <button onClick={handleUploadImage}>Upload</button> : null}
@@ -97,10 +93,10 @@ const ProfilePage = () => {
                                 </td>
                                 <td>{userData.lastLoginAt}</td>
                             </tr>
-                            {/* <tr>
-                        <td><strong>Roles:</strong></td>
-                        <td>{userData.roles.join(', ')}</td>
-                      </tr> */}
+                            <tr>
+                                <td><strong>Roles:</strong></td>
+                                <td>{userData.roles.join(', ')}</td>
+                            </tr>
                         </tbody>
                     </table>
                 ) : (
@@ -123,6 +119,7 @@ const ProfilePage = () => {
             const data = await response.json();
 
             setUserData(data);
+
         } catch (error) {
             console.log(error);
         }

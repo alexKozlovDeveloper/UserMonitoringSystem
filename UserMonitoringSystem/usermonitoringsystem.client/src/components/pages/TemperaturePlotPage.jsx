@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import Plot from 'react-plotly.js';
-
 import Header from '../common/Header';
 
 import '../../styles/TemperaturePlotPage.css'

@@ -47,15 +47,6 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  // await fetch('logout', {
-  //   method: 'POST',
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //     'accept': '*/*'
-  //   },
-  //   body: '{}',
-  // });
-
   return (
     <UserContext.Provider value={{ user, setUser, logout, fetchCurrentUser}}>
       {children}

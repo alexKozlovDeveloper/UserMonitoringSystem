@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-
 import Header from '../common/Header';
-
 import UserAvatar from '../common/UserAvatar';
-
 import { useUser } from '../UserContext';
 
 import '../../styles/UsersPage.css'
@@ -12,9 +9,6 @@ import '../../styles/UsersPage.css'
 const UsersPage = () => {
 
   const { user } = useUser();
-
-
-  console.log(user)
 
   const navigate = useNavigate();
 
@@ -69,7 +63,6 @@ const UsersPage = () => {
   )
 
   function GetMakeAdminButton(item) {
-
     if (user.roles.includes('admin') === false) {
       return null;
     }
@@ -84,7 +77,6 @@ const UsersPage = () => {
   }
 
   function GetDeleteButton(item) {
-
     if (user.roles.includes('admin') === false) {
       return null;
     }
@@ -112,7 +104,7 @@ const UsersPage = () => {
 
       setUsersData(data);
     } catch (error) {
-      // TODO: log error
+      console.log(error)
     }
   }
 
@@ -132,13 +124,8 @@ const UsersPage = () => {
         }
       }
 
-      console.log('succese')
-
-      //const data = await response.json();
-
-      //setUsersData(data);
+      getUserData();
     } catch (error) {
-      // TODO: log error
       console.log(error)
     }
   }
@@ -155,13 +142,8 @@ const UsersPage = () => {
         }
       }
 
-      console.log('succese deldete')
-
-      //const data = await response.json();
-
-      //setUsersData(data);
+      getUserData();
     } catch (error) {
-      // TODO: log error
       console.log(error)
     }
   }
