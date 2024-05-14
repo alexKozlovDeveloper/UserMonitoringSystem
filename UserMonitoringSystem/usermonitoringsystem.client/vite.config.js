@@ -50,6 +50,10 @@ export default defineConfig({
                 target: 'https://localhost:7040/',
                 secure: false
             },
+            '^/users': {
+                target: 'https://localhost:7040/',
+                secure: false
+            },
             '^/register': {
                 target: 'https://localhost:7040/',
                 secure: false
