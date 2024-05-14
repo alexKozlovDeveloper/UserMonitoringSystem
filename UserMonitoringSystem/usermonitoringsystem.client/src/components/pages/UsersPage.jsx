@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 import Header from '../common/Header';
 
@@ -30,8 +30,8 @@ const UsersPage = () => {
               <th>Login Count</th>
               <th>Last Login At</th>
               <th>Avatar</th>
-              <th>profile</th>
-              <th>delete</th>
+              <th>Profile</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -43,7 +43,7 @@ const UsersPage = () => {
                 <td>{user.loginCount}</td>
                 <td>{user.lastLoginAt}</td>
                 <td><UserAvatar userId={user.id}/></td>
-                <td>profile</td>
+                <td><Link className='header-link' to={`/profile?userId=${user.id}`}>Profile</Link></td>
                 <td>delete</td>
               </tr>
             )}

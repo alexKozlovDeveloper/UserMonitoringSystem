@@ -4,8 +4,6 @@ import { Link } from 'react-router-dom';
 
 import { useUser } from '../UserContext';
 
-import UserAvatar from './UserAvatar';
-
 import '../../styles/Header.css'
 
 const Header = () => {
@@ -29,12 +27,12 @@ const Header = () => {
     <div className='header-container'>
       <div>
         <Link className='header-link' to="/">Weather Forecast</Link>
-        <Link className='header-link' to="/profile">Profile</Link>
+        <Link className='header-link' to="/profile">My Profile</Link>
         <Link className='header-link' to="/users">Users</Link>
       </div>
       <div className='user-info-container'>
         <div>
-          Hello <strong>{user.userName}</strong>
+          {/* Hello <strong>{user.userName}</strong> */}
         </div>
         <div>
           <Link className='header-link' to="/login" onClick={handleLogout}>Logout</Link>

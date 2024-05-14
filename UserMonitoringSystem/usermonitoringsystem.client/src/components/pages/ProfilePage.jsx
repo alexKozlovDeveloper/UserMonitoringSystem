@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+import { useUser } from '../UserContext';
+
 import Header from '../common/Header';
 import UserAvatar from '../common/UserAvatar';
 
@@ -14,7 +16,14 @@ const ProfilePage = () => {
     const [userData, setUserData] = useState();
     const [selectedFile, setSelectedFile] = useState(null);
 
-    var userId = '44e58e45-60ae-427f-8309-d9d315285b59'
+    const searchParams = new URLSearchParams(window.location.search);
+    var userId = searchParams.get('userId')
+
+    const { user } = useUser();
+
+    if(userId === null) {        
+        userId = user.id
+    }    
 
     useEffect(() => {
         fetchUserData();
