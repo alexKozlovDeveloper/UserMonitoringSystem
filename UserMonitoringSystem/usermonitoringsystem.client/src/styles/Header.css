@@ -8,3 +8,13 @@
     padding: 2rem;
     background-color: whitesmoke;
 }
+
+.user-info-container {
+    display: flex;
+    justify-content: space-between;
+    color: black;
+}
+
+.user-info-container div {
+    padding: 10px;
+}
