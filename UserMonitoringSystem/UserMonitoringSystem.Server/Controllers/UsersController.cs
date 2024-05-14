@@ -27,13 +27,36 @@ namespace UserMonitoringSystem.Server.Controllers
         [HttpGet]
         public async Task<IEnumerable<UserDto>> GetUsers()
         {
-            var users = await _dbContext.Users.ToListAsync();
+            var usersWithRoles = await _dbContext.Users
+                .GroupJoin(
+                    _dbContext.UserRoles,
+                    user => user.Id,
+                    userRole => userRole.UserId,
+                    (user, userRoles) => new { User = user, UserRoles = userRoles }
+                )
+                .SelectMany(
+                    u => u.UserRoles.DefaultIfEmpty(),
+                    (u, userRole) => new { u.User, UserRole = userRole }
+                )
+                .GroupJoin(
+                    _dbContext.Roles,
+                    ur => ur.UserRole.RoleId,
+                    role => role.Id,
+                    (ur, roles) => new { ur.User, Role = roles.FirstOrDefault() }
+                )
+                .ToListAsync();
 
-            var user = await userManager.FindByIdAsync(users.First().Id);
+            var dtos = usersWithRoles.Select(ur =>
+            {
+                var userDto = _mapper.Map<UserDto>(ur.User);
+                userDto.Roles = usersWithRoles
+                    .Where(u => u.User.Id == ur.User.Id && u.Role != null)
+                    .Select(u => u.Role.Name)
+                    .ToArray();
+                return userDto;
+            }).ToList();
 
-            //var d = await userManager.GetLoginsAsync(user);
-
-            return _mapper.Map<IEnumerable<UserDto>>(users);
+            return dtos;
         }
 
         [HttpGet("{userId}")]

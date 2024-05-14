@@ -25,6 +25,7 @@ const UsersPage = () => {
           <thead>
             <tr>
               <th>User Name</th>
+              <th>Roles</th>
               <th>Login Count</th>
               <th>Last Login At</th>
               <th>Avatar</th>
@@ -36,6 +37,7 @@ const UsersPage = () => {
             {usersData.map(user =>
               <tr key={user.id}>
                 <td>{user.userName}</td>
+                <td>{user.roles}</td>
                 <td>{user.loginCount}</td>
                 <td>{user.lastLoginAt}</td>
                 <td><UserAvatar userId={user.id}/></td>
