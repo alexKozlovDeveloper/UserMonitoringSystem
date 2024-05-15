@@ -79,6 +79,13 @@ namespace UserMonitoringSystem.Server.Controllers
         [HttpDelete("{userId}")]
         public async Task<ActionResult<UserDto>> DeleteUser(string userId, CancellationToken cancellationToken)
         {
+            var currentUserId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (currentUserId == userId)
+            {
+                return BadRequest("Can't delete the current user.");
+            }
+
             var user = await _dbContext.Users.FirstOrDefaultAsync(a => a.Id == userId, cancellationToken);
 
             if (user == null)
@@ -96,6 +103,13 @@ namespace UserMonitoringSystem.Server.Controllers
         [Consumes("multipart/form-data")]
         public async Task<ActionResult<UserDto>> UploadFileAsync(string userId, IFormFile file, CancellationToken cancellationToken)
         {
+            var currentUserId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (currentUserId != userId)
+            {
+                return BadRequest("Can't upload a picture for another user.");
+            }
+
             var user = await _dbContext.Users.FirstOrDefaultAsync(a => a.Id == userId, cancellationToken);
 
             if (user == null)
